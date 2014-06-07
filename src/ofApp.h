@@ -21,8 +21,12 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);		
 		
 		ofVideoGrabber 		vidGrabber;
+		vector<ofVideoDevice>  videoDevices;
+		int 				idxDevice;
 		unsigned char * 	videoInverted;
 		ofTexture			videoTexture;
+		int 				camFrameRate;
 		int 				camWidth;
 		int 				camHeight;
+
 };

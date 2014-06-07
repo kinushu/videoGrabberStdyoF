@@ -3,23 +3,35 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 	
-	camWidth 		= 320;	// try to grab at this size. 
-	camHeight 		= 240;
+	idxDevice		= 0;
+
+    // BUFFALO BSW32KM03 USB PC Camera で上手くいく設定
+    camFrameRate    = 30;
+	camWidth 		= 640;	// try to grab at this size.
+	camHeight 		= 360;
 	
     //we can now get back a list of devices. 
-	vector<ofVideoDevice> devices = vidGrabber.listDevices();
-	
+	videoDevices = vidGrabber.listDevices();
+	vector<ofVideoDevice>& devices = videoDevices;
+
     for(int i = 0; i < devices.size(); i++){
 		cout << devices[i].id << ": " << devices[i].deviceName; 
         if( devices[i].bAvailable ){
             cout << endl;
         }else{
-            cout << " - unavailable " << endl; 
+            cout << " - unavailable " << endl;
         }
+        
+        ofVideoDevice& dev = devices[i];
+        int fmt_cnt = dev.formats.size();
+        for (int t=0; t < fmt_cnt; ++t) {
+            dev.formats[t].height;
+        }
+        
 	}
     
-	vidGrabber.setDeviceID(0);
-	vidGrabber.setDesiredFrameRate(60);
+	vidGrabber.setDeviceID(idxDevice);
+	vidGrabber.setDesiredFrameRate(camFrameRate);
 	vidGrabber.initGrabber(camWidth,camHeight);
 	
 	videoInverted 	= new unsigned char[camWidth*camHeight*3];
@@ -70,7 +82,20 @@ void ofApp::keyPressed  (int key){
 	if (key == 's' || key == 'S'){
 		vidGrabber.videoSettings();
 	}
-	
+
+	if (key == 'a' || key == 'A'){
+		vidGrabber.close();
+
+		idxDevice++;
+		int cnt = videoDevices.size();
+		if(idxDevice >= cnt)
+		{
+			idxDevice = 0;
+		}
+		vidGrabber.setDeviceID(idxDevice);
+		vidGrabber.setDesiredFrameRate(camFrameRate);
+		vidGrabber.initGrabber(camWidth,camHeight);
+	}
 	
 }
 
