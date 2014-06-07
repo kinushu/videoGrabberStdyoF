@@ -7,9 +7,15 @@ void ofApp::setup(){
 
     // BUFFALO BSW32KM03 USB PC Camera で上手くいく設定
     camFrameRate    = 30;
+    
+    // 4:3
 	camWidth 		= 640;	// try to grab at this size.
-	camHeight 		= 360;
-	
+	camHeight 		= 480;
+
+    // 16:9
+//  camWidth 		= 640;	// try to grab at this size.
+//	camHeight 		= 360;
+
     //we can now get back a list of devices. 
 	videoDevices = vidGrabber.listDevices();
 	vector<ofVideoDevice>& devices = videoDevices;
@@ -46,7 +52,8 @@ void ofApp::update(){
 	ofBackground(100,100,100);
 	
 	vidGrabber.update();
-	
+#if 0
+    // 一旦元画像のみ確認
 	if (vidGrabber.isFrameNew()){
 		int totalPixels = camWidth*camHeight*3;
 		unsigned char * pixels = vidGrabber.getPixels();
@@ -55,14 +62,16 @@ void ofApp::update(){
 		}
 		videoTexture.loadData(videoInverted, camWidth,camHeight, GL_RGB);
 	}
-
+#endif
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
 	ofSetHexColor(0xffffff);
 	vidGrabber.draw(20,20);
-	videoTexture.draw(20+camWidth,20,camWidth,camHeight);
+
+    // 一旦元画像のみ確認
+//	videoTexture.draw(20+camWidth,20,camWidth,camHeight);
 }
 
 
